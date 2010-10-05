@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><rss version="2.0"><channel>
 <title>Ryan's Git Achievements</title>
+<item><title>Butcher (Level 5)</title><description>Performed an interactive rebase using git rebase -i.</description></item>
 <item><title>Master Miller (Level 7)</title><description>Add only part of a file to the stage 225 times with git add -p.</description></item>
 <item><title>Collector (Level 5)</title><description>Fetches named heads or tags from another repository with git fetch</description></item>
 <item><title>Socialite (Level 5)</title><description>pushed a branch to a remote repository using git push</description></item>
@@ -19,5 +20,4 @@
 <item><title>Seamstress (Level 5)</title><description>amended a commit with git commit --amend.</description></item>
 <item><title>Miller (Level 5)</title><description>Add only part of a file to the stage 61 times with git add -p.</description></item>
 <item><title>Author (Level 6)</title><description>Made 2^Level commits using git commit.</description></item>
-<item><title>Butcher (Level 4)</title><description>Performed an interactive rebase using git rebase -i.</description></item>
 </channel></rss>
