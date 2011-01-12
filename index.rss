@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><rss version="2.0"><channel>
 <title>Ryan's Git Achievements</title>
+<item><title>Apprentice Thug (Level 3)</title><description>Forced pushed a branch with git push -f</description></item>
 <item><title>Dentist</title><description>Extracted patches using git log -p.</description></item>
 <item><title>Master Product Manager (Level 8)</title><description>Stash the changes in a dirty working directory away with git stash.</description></item>
 <item><title>Master Socialite (Level 7)</title><description>pushed a branch to a remote repository using git push</description></item>
@@ -19,5 +20,4 @@
 <item><title>Apprentice Investigator (Level 1)</title><description>Used git blame to annotates a file with information about how each line changed.</description></item>
 <item><title>Apprentice Blacksmith (Level 2)</title><description>Created a branch using git checkout -b.</description></item>
 <item><title>Master Author (Level 8)</title><description>Made 2^Level commits using git commit.</description></item>
-<item><title>Seamstress (Level 6)</title><description>amended a commit with git commit --amend.</description></item>
 </channel></rss>
