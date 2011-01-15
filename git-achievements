@@ -268,10 +268,17 @@ function check_for_achievements
             count_unlock_achievement "Banker" "Join two or more development histories together with git merge." "$1"
             ;;
         push )
-            count_unlock_achievement "Socialite" "pushed a branch to a remote repository using git push" "$1"
             case $2 in
-                -f )
-                count_unlock_achievement "Thug" "Forced pushed a branch with git push -f" "push -f"
+                -n|--dry-run )
+                ;;
+            * )
+                # not a dry run
+                count_unlock_achievement "Socialite" "pushed a branch to a remote repository using git push" "$1"
+                case $2 in
+                    -f )
+                    count_unlock_achievement "Thug" "Forced pushed a branch with git push -f" "push -f"
+                    ;;
+                esac
                 ;;
             esac
             ;;
