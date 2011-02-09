@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><rss version="2.0"><channel>
 <title>Ryan's Git Achievements</title>
+<item><title>Apprentice Pilgrim (Level 1)</title><description>Performed a rebase using git rebase --onto.</description></item>
+<item><title>Master Collector (Level 7)</title><description>Fetches named heads or tags from another repository with git fetch</description></item>
 <item><title>Hunter (Level 5)</title><description>Used git bisect to perform a binary search to find which change introduced a bug.</description></item>
 <item><title>Apprentice Investigator (Level 2)</title><description>Used git blame to annotates a file with information about how each line changed.</description></item>
 <item><title>Apprentice Thug (Level 3)</title><description>Forced pushed a branch with git push -f</description></item>
@@ -18,6 +20,4 @@
 <item><title>Cleaning lady (Level 5)</title><description>Remove untracked files from the working tree with git clean</description></item>
 <item><title>Apprentice News Reader (Level 1)</title><description>Show logs with difference each commit introduces with git whatchanged</description></item>
 <item><title>Presenter (Level 4)</title><description>Shows one or more objects (blobs, trees, tags and commits) with git show</description></item>
-<item><title>Socialite (Level 6)</title><description>pushed a branch to a remote repository using git push</description></item>
-<item><title>Apprentice Investigator (Level 1)</title><description>Used git blame to annotates a file with information about how each line changed.</description></item>
 </channel></rss>
