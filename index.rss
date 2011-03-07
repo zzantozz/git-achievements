@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><rss version="2.0"><channel>
 <title>Ryan's Git Achievements</title>
+<item><title>Librarian</title><description>Looked for change that introduce or remove a string with git log -S</description></item>
 <item><title>Apprentice News Reader (Level 2)</title><description>Show logs with difference each commit introduces with git whatchanged</description></item>
 <item><title>Master Author (Level 9)</title><description>Made 2^Level commits using git commit.</description></item>
 <item><title>Apprentice Pilgrim (Level 2)</title><description>Performed a rebase using git rebase --onto.</description></item>
@@ -19,5 +20,4 @@
 <item><title>Collector (Level 6)</title><description>Fetches named heads or tags from another repository with git fetch</description></item>
 <item><title>Master Miller (Level 8)</title><description>Add only part of a file to the stage 436 times with git add -p.</description></item>
 <item><title>Apprentice Architect (Level 3)</title><description>Created a new repository with git init.</description></item>
-<item><title>Apprentice Blacksmith (Level 3)</title><description>Created a branch using git checkout -b.</description></item>
 </channel></rss>
