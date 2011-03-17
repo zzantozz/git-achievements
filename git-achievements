@@ -401,7 +401,7 @@ echo "
     # Git Commands
     echo 'Git commands sorted by usage:' >> index.html
     echo "<pre style=\"text-align: left\">" >> index.html
-    cat  "${ACTIONLOGFILE}" | grep -v Date | awk '{ print $1 }' | sort | uniq -c | sort -nr >> index.html
+    cat  "${ACTIONLOGFILE}" | grep -v Date | grep -v 'git-dir' | awk '{ print $1 }' | sort | uniq -c | sort -nr >> index.html
     echo "</pre>" >> index.html
 
     # Locked Achievements
