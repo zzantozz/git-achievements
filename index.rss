@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><rss version="2.0"><channel>
 <title>Ryan's Git Achievements</title>
+<item><title>Master Miller (Level 9)</title><description>Add only part of a file to the stage 834 times with git add -p.</description></item>
 <item><title>Merchant (Level 4)</title><description>Added an external repository with git remote add.</description></item>
 <item><title>Master Seamstress (Level 7)</title><description>amended a commit with git commit --amend.</description></item>
 <item><title>Librarian</title><description>Looked for change that introduce or remove a string with git log -S</description></item>
@@ -19,5 +20,4 @@
 <item><title>Blacksmith (Level 4)</title><description>Created a branch using git checkout -b.</description></item>
 <item><title>Weaver</title><description>Investigate old branches by using git reflog</description></item>
 <item><title>Apprentice Traveler (Level 3)</title><description>Streamed changes between another rcs with git svn or git p4.</description></item>
-<item><title>Collector (Level 6)</title><description>Fetches named heads or tags from another repository with git fetch</description></item>
 </channel></rss>
