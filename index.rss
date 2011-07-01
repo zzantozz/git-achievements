@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><rss version="2.0"><channel>
 <title>Ryan's Git Achievements</title>
+<item><title>Architect (Level 4)</title><description>Created a new repository with git init.</description></item>
 <item><title>Blacksmith (Level 5)</title><description>Created a branch using git checkout -b.</description></item>
 <item><title>Master Author (Level 10)</title><description>Made 2^Level commits using git commit.</description></item>
 <item><title>Apprentice Pilgrim (Level 3)</title><description>Performed a rebase using git rebase --onto.</description></item>
@@ -19,5 +20,4 @@
 <item><title>Apprentice News Reader (Level 2)</title><description>Show logs with difference each commit introduces with git whatchanged</description></item>
 <item><title>Master Author (Level 9)</title><description>Made 2^Level commits using git commit.</description></item>
 <item><title>Apprentice Pilgrim (Level 2)</title><description>Performed a rebase using git rebase --onto.</description></item>
-<item><title>Apprentice Pilgrim (Level 1)</title><description>Performed a rebase using git rebase --onto.</description></item>
 </channel></rss>
