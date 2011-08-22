@@ -10,10 +10,7 @@
 # 2. Redistributions in binary form must reproduce the above copyright
 #    notice, this list of conditions and the following disclaimer in the
 #    documentation and/or other materials provided with the distribution.
-# 3. All advertising materials mentioning features or use of this software
-#    must display the following acknowledgement:
-#    This product includes software developed by the <organization>.
-# 4. Neither the name of the project nor the
+# 3. Neither the name of the project nor the
 #    names of its contributors may be used to endorse or promote products
 #    derived from this software without specific prior written permission.
 #
@@ -46,14 +43,21 @@ function git_achievements_command
             echo ""
             echo "Options:"
             echo "    -l --list    Show all achievements."
-            echo "    -p --publish Generate achievements html files and if achievements.upload not set to \"true\" add the files and push to origin."
+            echo "    -p --publish Generate achievements html files and if achievements.upload is set to \"true\" add the files and push to origin."
             ;;
     esac
 }
 
 function log_action
 {
-    echo "$@" >> "${ACTIONLOGFILE}"
+    local expansion=$(unalias_command "$1")
+    
+    if [[ $expansion ]] ; then
+        shift
+        echo "$expansion $@" >> "${ACTIONLOGFILE}"
+    else
+        echo "$@" >> "${ACTIONLOGFILE}"
+    fi
     echo -n "Date: " >> "${ACTIONLOGFILE}"
     date >> "${ACTIONLOGFILE}"
 }
@@ -86,13 +90,14 @@ function unlock_achievement()
 
 function count_command
 {
-    export power=`awk "START {n=0} /$1/ {n++} END { print log(n)/log(2) }" "$ACTIONLOGFILE"`
-    export count=`awk "START {n=0} /$1/ {n++} END { print n }" "$ACTIONLOGFILE"`
-    #export powerof2=`awk "START {n=0} /$1/ {n++} END { print and(n, n-1) }" "$ACTIONLOGFILE"`
+    export power=`awk "BEGIN {n=0} /$1/ {n++} END { print log(n)/log(2) }" "$ACTIONLOGFILE"`
+    export count=`awk "BEGIN {n=0} /$1/ {n++} END { print n }" "$ACTIONLOGFILE"`
+    #export powerof2=`awk "BEGIN {n=0} /$1/ {n++} END { print and(n, n-1) }" "$ACTIONLOGFILE"`
     # mysys gawk it old and doesn't have the bitwise operation and :( so we have to use perl for now
     export powerof2=`echo 'use Env; $y=$ENV{'count'}; $x=($y & ($y-1)); print "$x\n" ' | perl -`
 
-    if [ ${count} -eq 1 ] ; then
+    # Set a default value of 0. Bug seems to occur when the achievement is unlocked
+    if [ ${count:-0} -eq 1 ] ; then
         powerof2="1"
     fi
     #echo "cmd: $1 powerof2: $powerof2 power: $power count: $count"
@@ -161,12 +166,14 @@ function check_for_achievements
     if [[ $expansion ]] ; then
       # not a real inventor
       unlock_achievement "Garage Inventor" "Used a custom alias for a Git command"
-      command="$expansion"
+      
+      # get actual command, removing any additional parameters from the command
+      command=$(echo "$expansion" | awk '{ print $1; }')
     fi
 
     case $command in
        add )
-            count_unlock_achievement "Stone Mason" "Added files to the index area for inclusion in the next commit with git add" "$1"
+            count_unlock_achievement "Stone Mason" "Added files to the index area for inclusion in the next commit with git add" "$command"
             case $2 in
                 *.gitignore )
                 unlock_achievement "Caretaker" "Added a .gitignore file to a repository."
@@ -177,19 +184,19 @@ function check_for_achievements
             esac
             ;;
         am )
-            count_unlock_achievement "Messenger" "Applied a patch using git am." "$1"
+            count_unlock_achievement "Messenger" "Applied a patch using git am." "$command"
             ;;
         bisect )
-            count_unlock_achievement "Hunter" "Used git bisect to perform a binary search to find which change introduced a bug." "$1"
+            count_unlock_achievement "Hunter" "Used git bisect to perform a binary search to find which change introduced a bug." "$command"
             ;;
         blame )
-            count_unlock_achievement "Investigator" "Used git blame to annotates a file with information about how each line changed." "$1"
+            count_unlock_achievement "Investigator" "Used git blame to annotate a file with information about how each line changed." "$command"
             ;;
         bundle )
-            count_unlock_achievement "Delivery Boy" "Move objects and refs by archive with git bundle." "$1"
+            count_unlock_achievement "Delivery Boy" "Move objects and refs by archive with git bundle." "$command"
             ;;
         cherry-pick )
-            unlock_achievement "Cherry Picker" "Used git cherry-pick to add a sha from another branch into the current branch." "$1"
+            unlock_achievement "Cherry Picker" "Used git cherry-pick to add a sha from another branch into the current branch." "$command"
             ;;
         checkout )
             case $2 in
@@ -199,12 +206,12 @@ function check_for_achievements
             esac
             ;;
         clean )
-            count_unlock_achievement "Cleaning lady" "Remove untracked files from the working tree with git clean" "$1"
+            count_unlock_achievement "Cleaning lady" "Remove untracked files from the working tree with git clean" "$command"
             ;;
         commit )
-            count_unlock_achievement "Author" "Made 2^Level commits using git commit." "$1"
-            if [ "`git log --oneline | wc -l`" -eq "1" ] ; then
-                unlock_achievement "Let there be light" "Commit without a parent." "$1"
+            count_unlock_achievement "Author" "Made 2^Level commits using git commit." "$command"
+            if [ "`git log --pretty=oneline | wc -l`" -eq "1" ] ; then
+                unlock_achievement "Let there be light" "Commit without a parent." "$command"
             fi
             case $2 in
                 --amend )
@@ -232,31 +239,31 @@ function check_for_achievements
 
             ;;
         fetch )
-            count_unlock_achievement "Collector" "Fetches named heads or tags from another repository with git fetch" "$1"
+            count_unlock_achievement "Collector" "Fetches named heads or tags from another repository with git fetch" "$command"
             ;;
         filter-branch )
-            count_unlock_achievement "Tree Trimmer" "Rewrite branches with git filter-branch" "$1"
+            count_unlock_achievement "Tree Trimmer" "Rewrite branches with git filter-branch" "$command"
             ;;
         format-patch )
-            count_unlock_achievement "Archivist" "Prepare each commit with its patch in one file per commit with git format-patch" "$1"
+            count_unlock_achievement "Archivist" "Prepare each commit with its patch in one file per commit with git format-patch" "$command"
             ;;
         gc )
-            count_unlock_achievement "Chimney Sweeper" "Used git gc to run a number of housekeeping tasks on the current repository." "$1"
+            count_unlock_achievement "Chimney Sweeper" "Used git gc to run a number of housekeeping tasks on the current repository." "$command"
             ;;
         grep )
-            count_unlock_achievement "Fisherman" "Look for specified patterns in the current repository with git grep." "$1"
+            count_unlock_achievement "Fisherman" "Look for specified patterns in the current repository with git grep." "$command"
             ;;
         imap-send )
-            count_unlock_achievement "Postman" "Send a collection of patches from stdin to an IMAP folder with git imap-send" "$1"
+            count_unlock_achievement "Postman" "Send a collection of patches from stdin to an IMAP folder with git imap-send" "$command"
             ;;
         init )
-            count_unlock_achievement "Architect" "Created a new repository with git init." "$1"
+            count_unlock_achievement "Architect" "Created a new repository with git init." "$command"
             ;;
         instaweb )
-            count_unlock_achievement "Web Designer" "Instantly browse your working repository in gitweb with git instaweb" "$1"
+            count_unlock_achievement "Web Designer" "Instantly browse your working repository in gitweb with git instaweb" "$command"
             ;;
         log )
-            count_unlock_achievement "Historian" "Investigate the commit log using git log." "$1"
+            count_unlock_achievement "Historian" "Investigate the commit log using git log." "$command"
             case $2 in
                 -p* )
                 unlock_achievement "Dentist" "Extracted patches using git log -p."
@@ -267,13 +274,20 @@ function check_for_achievements
             esac
             ;;
         merge )
-            count_unlock_achievement "Banker" "Join two or more development histories together with git merge." "$1"
+            count_unlock_achievement "Banker" "Join two or more development histories together with git merge." "$command"
             ;;
         push )
-            count_unlock_achievement "Socialite" "pushed a branch to a remote repository using git push" "$1"
             case $2 in
-                -f )
-                count_unlock_achievement "Thug" "Forced pushed a branch with git push -f" "push -f"
+                -n|--dry-run )
+                ;;
+            * )
+                # not a dry run
+                count_unlock_achievement "Socialite" "pushed a branch to a remote repository using git push" "$command"
+                case $2 in
+                    -f )
+                    count_unlock_achievement "Thug" "Forced pushed a branch with git push -f" "push -f"
+                    ;;
+                esac
                 ;;
             esac
             ;;
@@ -306,25 +320,38 @@ function check_for_achievements
             unlock_achievement "Beach Lion" "Restricted login shell for GIT-only SSH access with git shell"
             ;;
         show )
-            count_unlock_achievement "Presenter" "Shows one or more objects (blobs, trees, tags and commits) with git show" "$1"
+            count_unlock_achievement "Presenter" "Shows one or more objects (blobs, trees, tags and commits) with git show" "$command"
             ;;
         show-branch )
-            count_unlock_achievement "Gardner" "Shows the commit ancestry graph with git show-branch" "$1"
+            count_unlock_achievement "Gardner" "Shows the commit ancestry graph with git show-branch" "$command"
             ;;
         stash )
-            count_unlock_achievement "Product Manager" "Stash the changes in a dirty working directory away with git stash." "$1"
+            count_unlock_achievement "Product Manager" "Stash the changes in a dirty working directory away with git stash." "$command"
+            ;;
+        submodule )
+            case $2 in
+                add )
+                count_unlock_achievement "Cathedral Architect" "Added a submodule to a repository." "submodule add"
+                ;;
+                update )
+                count_unlock_achievement "Cathedral Worker" "Cloned submodule repository and checked out commits specified by superproject." "submodule update"
+                ;;
+            esac
             ;;
         svn|p4 )
-            count_unlock_achievement "Traveler" "Streamed changes between another rcs with git svn or git p4." "$1"
+            count_unlock_achievement "Traveler" "Streamed changes between another rcs with git svn or git p4." "$command"
             ;;
         tag )
-            count_unlock_achievement "Gipsy" "Create, list, delete a tag signed with GPG using git tag" "$1"
+            count_unlock_achievement "Gipsy" "Create, list, delete a tag signed with GPG using git tag" "$command"
             ;;
         whatchanged )
-            count_unlock_achievement "News Reader" "Show logs with difference each commit introduces with git whatchanged" "$1"
+            count_unlock_achievement "News Reader" "Show logs with difference each commit introduces with git whatchanged" "$command"
+            ;;
+        flow )
+            count_unlock_achievement "Pedantic" "Use the flow extension to encourage an orderly and standardized branching model" "$command"
             ;;
         hash-object|update-index|commit-tree|update-ref )
-            count_unlock_achievement "Plumber" "Use the internal plumbing commands of git." "$1"
+            count_unlock_achievement "Plumber" "Use the internal plumbing commands of git." "$command"
             ;;
     esac
 }
@@ -358,16 +385,18 @@ function publish_achievements
     user=`git config --global user.name`
 
 echo "
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>
 <title>${user}'s Git Achievements</title>
-<link rel=\"alternate\" type=\"application/rss+xml\" title\"rss feed\" href=\"index.rss\"/>
+<link rel=\"alternate\" type=\"application/rss+xml\" title=\"rss feed\" href=\"index.rss\"/>
 <link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\"/>
 </head>
 <body>
 " > index.html
-    echo "<h2>${user}'s Git Achievements</h2>" >> index.html
+    mailhash=`git config --global user.email | xargs echo -n | tr '[A-Z]' '[a-z]' | openssl md5 | sed -e 's/.* //'`
+    echo "<h2>${user}'s Git Achievements <img src='http://www.gravatar.com/avatar/${mailhash}'/></h2>" >> index.html
 
     # STATS
     cat git-achievements | grep 'unlock_achievement ' | grep -v ' sed ' | grep -v '\${' | sed -e 's/.*unlock_achievement //g' -e 's/^"//g' -e 's/"$//g' -e 's/\$power/X/g' -e 's/\$count/X/g' -e 's/\$hooks/X/g' | sort | awk -F"\" \"" '{ print "<li><div class=\"title\">" $1 "</div><div class=\"info\">" $2 "</div></li>" }' | link_to_git_docs > all.html
@@ -390,7 +419,7 @@ echo "
     # Git Commands
     echo 'Git commands sorted by usage:' >> index.html
     echo "<pre style=\"text-align: left\">" >> index.html
-    cat  "${ACTIONLOGFILE}" | grep -v Date | awk '{ print $1 }' | sort | uniq -c | sort -nr >> index.html
+    cat  "${ACTIONLOGFILE}" | grep -v Date | grep -v 'git-dir' | awk '{ print $1 }' | sort | uniq -c | sort -nr >> index.html
     echo "</pre>" >> index.html
 
     # Locked Achievements
@@ -423,6 +452,8 @@ There are $total Achievements. Some achievements can be leveled up depending on 
     # Update the RSS feed
     echo '<?xml version="1.0" encoding="utf-8"?><rss version="2.0"><channel>' > index.rss
     echo "<title>${user}'s Git Achievements</title>" >> index.rss
+    echo "<description></description>" >> index.rss
+    echo "<link></link>" >> index.rss
     cat "${ACHIEVEMENTSLOGFILE}"  | grep -ve '^$' | grep -v 'Git Achievement Unlocked!' | grep -v '*' | sed -e 's/^ *//g'  -e 's/ *$//g' | awk '{ if (NR % 2 != 0) printf "<item><title>" $0 "</title>"; else printf "<description>" $0 "</description></item>\n" }' | tail -n 20 | sed '1!G;h;$!d' >> index.rss
     echo '</channel></rss>' >> index.rss
 
